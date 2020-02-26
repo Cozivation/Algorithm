@@ -1,0 +1,27 @@
+r, c, t = list(map(int,input().split()))
+arr = [list(map(int,input().split())) for _ in range(r)]
+f = [i for i in range(r) if arr[i][0] == -1]
+dx, dy = [[-1,0,1,0], [1,0,-1,0]], [0,1,0,-1]
+for _ in range(t):
+	brr = [[0] * c for _ in range(r)]
+	for i in range(r):
+		for j in range(c):
+			if arr[i][j] > 0:
+				num = 0
+				for x,y in ((1,0),(-1,0),(0,1),(0,-1)):
+					if x+i != -1 and y + j != -1 and x + i != r and y + j != c and arr[x+i][y+j] != -1:
+						brr[x+i][y+j] += arr[i][j] // 5
+						num += arr[i][j] // 5
+				arr[i][j] = arr[i][j] - num
+	arr = [[arr[i][j] + brr[i][j] for j in range(c)] for i in range(r)]
+	for i in range(2):
+		x, y, s = f[i], 0, 0
+		while True:
+			x, y = x + dx[i][s], y + dy[s]
+			if x + dx[i][s] == f[i] and y == 0:
+				break
+			if x + dx[i][s] == r or x + dx[i][s] == -1 or  y + dy[s] == c or y + dy[s] == -1 or (x==f[i] and y==c-1):
+				s = s+1
+			arr[x][y] = arr[x+dx[i][s]][y+dy[s]]
+		arr[f[i]][1] = 0
+print(sum(map(sum,arr)) + 2)
