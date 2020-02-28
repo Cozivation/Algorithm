@@ -1,0 +1,57 @@
+from collections import deque
+n,m,t = list(map(int,input().split()))
+arr = [deque(map(int,input().split())) for _ in range(n)]
+com = [list(map(int,input().split())) for _ in range(t)]
+for i in range(t):
+	for j in range(com[i][0],n+1,com[i][0]):
+		for k in range(com[i][2]):
+			if com[i][1] == 0:
+				arr[j-1].appendleft(arr[j-1].pop())
+			elif com[i][1] == 1:
+				arr[j-1].append(arr[j-1].popleft())
+	sign = False
+	q = deque()
+	for k in range(n):
+		for l in range(m):
+			if arr[k][l] == 0:
+				continue
+			q.append([k,l])
+			sig = False
+			while q:
+				x,y = q.popleft()
+				for _x,_y in ((1,0),(-1,0),(0,1),(0,-1)):
+					xx, yy = x+_x, y+_y
+					if xx == -1 or xx == n:
+						continue
+					if yy == -1:
+						yy = m-1
+					elif yy == m:
+						yy = 0
+					if (xx != k or yy != l) and arr[xx][yy] == arr[k][l]:
+						arr[xx][yy] = 0
+						q.append([xx,yy])
+						sign, sig = True, True
+			if sig:
+				arr[k][l] = 0
+	if not sign:
+		avg, cnt = 0,0
+		for k in range(n):
+			for l in range(m):
+				if arr[k][l] != 0:
+					cnt += 1
+					avg += arr[k][l]
+		if cnt == 0:
+			continue
+		avg = avg/cnt
+		for k in range(n):
+			for l in range(m):
+				if arr[k][l] == 0:
+					continue
+				if float(arr[k][l]) < avg:
+					arr[k][l] += 1
+				elif float(arr[k][l]) > avg:
+					arr[k][l] -= 1
+ans = 0
+for i in range(n):
+	ans += sum(arr[i])
+print(ans)
