@@ -1,0 +1,51 @@
+ans = 999999
+def move(x,y,dir,arr):
+	if dir == 1:
+		for i in range(x-1,-1,-1):
+			if arr[i][y] == 6:
+				break
+			elif arr[i][y] == 0:
+				arr[i][y] = -1
+	elif dir == 2:
+		for i in range(y+1,m):
+			if arr[x][i] == 6:
+				break
+			elif arr[x][i] == 0:
+				arr[x][i] = -1
+	elif dir == 3:
+		for i in range(x+1,n):
+			if arr[i][y] == 6:
+				break
+			elif arr[i][y] == 0:
+				arr[i][y] = -1
+	elif dir == 4:
+		for i in range(y-1,-1,-1):
+			if arr[x][i] == 6:
+				break
+			elif arr[x][i] == 0:
+				arr[x][i] = -1
+def solve(cnt,arr):
+	global ans
+	if cnt == len(q):
+		sum = 0
+		for i in range(n):
+			sum += arr[i].count(0)
+		ans = min(ans,sum)
+		return
+	x,y = q[cnt]
+	num = arr[x][y] - 1
+	for i in range(len(cctv[num])):
+		tmp = [arr[kk][:] for kk in range(n)]
+		for j in cctv[num][i]:
+			move(x,y,j,arr)
+		solve(cnt+1,arr)
+		arr = [tmp[kk][:] for kk in range(n)]
+n,m = list(map(int,input().split()))
+arr = [list(map(int,input().split())) for _ in range(n)]
+q = [(i,j) for j in range(m) for i in range(n) if arr[i][j] != 0 and arr[i][j] != 6]
+cctv = [[[1],[2],[3],[4]],[[1,3],[2,4]]
+,[[1,2],[2,3],[3,4],[1,4]]
+,[[1,2,3],[2,3,4],[3,4,1],[4,1,2]]
+,[[1,2,3,4]]]
+solve(0,arr)
+print(ans)
