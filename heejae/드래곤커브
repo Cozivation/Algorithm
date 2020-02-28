@@ -1,0 +1,27 @@
+n = int(input())
+cmd = [list(map(int,input().split())) for _ in range(n)]
+m = 0
+dx, dy = [0,-1,0,1], [1,0,-1,0]
+arr = [[0]*101 for _ in range(101)]
+for i in range(n):
+	m = max(m,cmd[i][3])
+q = []
+q.append(0)
+for i in range(m):
+	t1 = [(q[i] + 1)%4 for i in range(len(q))]
+	t1.reverse()
+	q.extend(t1)
+for i in range(n):
+	x,y = cmd[i][1],cmd[i][0]
+	arr[x][y] = 1
+	for j in range(2**cmd[i][3]):
+		tmp = (q[j] + cmd[i][2])%4
+		x, y = x + dx[tmp], y + dy[tmp]
+		if x < 101 and x > -1 and y < 101 and y > -1:
+			arr[x][y] = 1
+ans = 0
+for i in range(100):
+	for j in range(100):
+		if arr[i][j] == 1 and arr[i][j+1] == 1 and arr[i+1][j] == 1 and arr[i+1][j+1] == 1:
+			ans += 1
+print(ans)
