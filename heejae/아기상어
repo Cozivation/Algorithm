@@ -1,0 +1,34 @@
+from heapq import heappush,heappop
+import sys
+n = int(input())
+arr = [list(map(int,input().split())) for _ in range(n)]
+siz, tim, fee = 2,0,0
+while True:
+	q = []
+	check = [[False]*n for _ in range(n)]
+	for i in range(n):
+		for j in range(n):
+			if arr[i][j] == 9:
+				heappush(q,(0,i, j)) 
+				check[i][j] = True
+				arr[i][j] = 0
+				break
+	sig = True
+	while q:
+		d, x, y = heappop(q)
+		if arr[x][y] != 0 and arr[x][y] != siz:
+			arr[x][y] = 9
+			tim += d
+			sig = False
+			fee += 1
+			if fee == siz:
+				siz += 1
+				fee = 0
+			break
+		for dx, dy in ((-1,0),(0,-1),(0,1),(1,0)):
+			if x + dx != -1 and x + dx != n and y + dy != -1 and y + dy != n and not check[x+dx][y+dy] and arr[x+dx][y+dy] <= siz:
+				check[x+dx][y+dy] = True
+				heappush(q,(d+1,x+dx,y+dy))
+	if sig:
+		print(tim)
+		sys.exit(0)
