@@ -1,0 +1,48 @@
+from collections import deque
+import sys
+n, k = list(map(int,input().split()))
+arr = [list(map(int,input().split())) for _ in range(n)]
+brr = [[deque() for _ in range(n)] for _ in range(n)]
+crr = [[0,0,0] for _ in range(k)]
+dx, dy = [0,0,-1,1], [1,-1,0,0]
+def solve(x,y):
+	brr[x][y].extend(tmp)
+	for t in tmp:
+		crr[t] = [x,y,crr[t][2]]
+	if len(brr[x][y]) >= 4:
+		print(cnt)
+		sys.exit(0)
+for i in range(k):
+	one, two, three = list(map(int,input().split()))
+	crr[i] = [one-1,two-1,three-1]
+	brr[one-1][two-1].append(i)
+for cnt in range(1,1001):
+	for i in range(k):
+		x, y, d, sign = crr[i][0], crr[i][1], crr[i][2], True
+		tmp = deque()
+		si = len(brr[x][y])
+		for _ in range(si):
+			num = brr[x][y].popleft()
+			if sign and num != i:
+				brr[x][y].append(num)
+			elif sign and num == i:
+				sign = False
+				tmp.append(num)
+			elif not sign:
+				tmp.append(num)
+		_x, _y = x + dx[d], y + dy[d]
+		if _x == -1 or _x == n or _y == -1 or _y == n or arr[_x][_y] == 2:
+			crr[tmp[0]][2] = crr[tmp[0]][2] + 1 if crr[tmp[0]][2] % 2 == 0 else crr[tmp[0]][2] - 1
+			if x - dx[d] == -1 or x - dx[d] == n or y - dy[d] == -1 or y - dy[d] == n or arr[x-dx[d]][y-dy[d]] == 2:
+				brr[x][y].extend(tmp)
+			elif arr[x-dx[d]][y-dy[d]] == 1:
+				tmp.reverse()
+				solve(x-dx[d],y-dy[d])
+			elif arr[x-dx[d]][y-dy[d]] == 0:
+				solve(x-dx[d],y-dy[d])
+		elif arr[_x][_y] == 0:
+			solve(_x,_y)
+		elif arr[_x][_y] == 1:
+			tmp.reverse()
+			solve(_x,_y)
+print(-1)
