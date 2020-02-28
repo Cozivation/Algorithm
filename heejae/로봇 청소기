@@ -1,0 +1,24 @@
+import sys
+n, m = list(map(int,input().split()))
+sx, sy, sd = list(map(int,input().split()))
+arr = [list(map(int,input().split())) for _ in range(n)]
+arr[sx][sy] = -1
+dx, dy = (-1, 0, 1, 0), (0, 1, 0, -1)
+ans = 1
+while True:
+	sign = False
+	for i in range(4):
+		sd = (sd+3)%4
+		_x, _y = sx + dx[sd], sy + dy[sd]
+		if arr[_x][_y] == 0:
+			sx, sy = _x, _y
+			ans += 1
+			arr[sx][sy] = -1
+			sign = True
+			break
+	if not sign:
+		if arr[sx - dx[sd]][sy - dy[sd]] != 1:
+			sx , sy = sx - dx[sd] , sy - dy[sd]
+		else :
+			print(ans)
+			sys.exit(0)
