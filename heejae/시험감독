@@ -1,0 +1,6 @@
+n = int(input())
+arr = list(map(int,input().split()))
+b, c = list(map(int,input().split()))
+arr = [(arr[i] - b)//c + 1 if (arr[i] - b)%c != 0 else (arr[i] - b)//c for i in range(n)]
+s = sum([arr[i] if arr[i] > 0 else 0 for i in range(n)]) + n
+print(s)
