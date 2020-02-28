@@ -1,0 +1,50 @@
+import sys
+from collections import deque
+def move(x,y,dx,dy):
+	count = 0
+	for i in range(11):
+		if arr[x+dx][y+dy] != "#" and arr[dx][dy] != "O":
+			dx += x
+			dy += y
+			count += 1
+		else:
+			break
+	return dx,dy,count
+n, m = list(map(int,input().split()))
+arr = [list(map(str,input().strip())) for _ in range(n)]
+bx, by, rx, ry, ox, oy = [0] * 6
+for i in range(n):
+	for j in range(m):
+		if arr[i][j] == "B":
+			bx, by = i, j
+		elif arr[i][j] == "R":
+			rx, ry = i, j
+		elif arr[i][j] == "O":
+			ox, oy = i, j
+q = deque()
+q.append([rx,ry,bx,by,0])
+vis = [[[[False] *m for _ in range(n)] for _ in range(m)] for _ in range(n)]
+vis[rx][ry][bx][by] = True
+while q:
+	drx, dry, dbx, dby, cnt = q.popleft()
+	if cnt == 10:
+		break
+	for x,y in ((1,0),(-1,0),(0,1),(0,-1)):
+		rrx,rry,rrc = move(x,y,drx,dry)
+		bbx,bby,bbc = move(x,y,dbx,dby)
+		if arr[bbx][bby] == "O":
+			continue
+		if arr[rrx][rry] == "O":
+			print(cnt+1)
+			sys.exit(0)
+		if rrx == bbx and rry == bby:
+			if rrc > bbc:
+				rrx -= x
+				rry -= y
+			else :
+				bbx -= x
+				bby -= y
+		if not vis[rrx][rry][bbx][bby]:
+			vis[rrx][rry][bbx][bby] = True
+			q.append([rrx,rry,bbx,bby,cnt+1])
+print(-1)
