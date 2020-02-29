@@ -1,0 +1,25 @@
+ans = -1e9
+def solve(num,brr):
+	global ans
+	if num == n:
+		brr = [str(eval(brr[i])) if len(brr[i])==3 else brr[i] for i in range(len(brr))]
+		t = brr[:]
+		l = len(brr)//2
+		for i in range(1,l+1):
+			tmp = []
+			tmp.append(str(eval(''.join([t[0],t[1],t[2]]))))
+			tmp.extend([t[j] for j in range(3,len(t))])
+			t = tmp[:]
+		ans = max(ans,int(t[0]))
+		return
+	brr.append(arr[num])
+	solve(num+1,brr)
+	brr.pop()
+	if len(brr) >= 1 and (brr[-1] == "*" or brr[-1] == "+" or brr[-1] == "-") and num + 3 <= n:
+		brr.append(''.join([arr[num],arr[num+1],arr[num+2]]))
+		solve(num+3,brr)
+		brr.pop()
+n = int(input())
+arr = list(map(str,input().strip()))
+solve(0,[])
+print(ans)
