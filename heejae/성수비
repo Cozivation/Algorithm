@@ -1,0 +1,34 @@
+from copy import deepcopy
+from heapq import heappush,heappop
+import itertools
+n,m,d = list(map(int,input().split()))
+arr = [list(map(int,input().split())) for _ in range(n)]
+crr = list(itertools.combinations([i for i in range(m)],3))
+ans = 0
+for c in crr:
+	brr = deepcopy(arr)
+	num = 0
+	while True:
+		qq = []
+		if sum([brr[i].count(1) for i in range(n)]) == 0:
+			break
+		for cnt in range(3):
+			q = []
+			for i in range(n):
+				for j in range(m):
+					if brr[i][j] and abs(n-i) + abs(c[cnt]-j) <= d:
+						heappush(q,(abs(n-i) + abs(c[cnt]-j),j,i))
+			if len(q) == 0:
+				continue
+			le, _y, _x = heappop(q)
+			if [_x,_y] not in qq:
+				qq.append([_x,_y])
+		for dx, dy in qq:
+			brr[dx][dy] = 0
+			num += 1
+		for i in range(n-1,0,-1):
+			brr[i] = brr[i-1][:]
+		for i in range(m):
+			brr[0][i] = 0
+	ans = max(ans,num)
+print(ans)
