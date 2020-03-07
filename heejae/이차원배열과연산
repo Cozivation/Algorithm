@@ -1,0 +1,44 @@
+import sys
+def solve(check):
+	q = []
+	for c in range(1,101):
+		if check[c] != 0:
+			q.append([check[c],c])
+	q.sort()
+	return q
+n, m = 3, 3
+ax, ay, an = list(map(int,input().split()))
+arr = [[0] * 101 for _ in range(101)]
+for i in range(1,4):
+	arr[i][1], arr[i][2], arr[i][3] = list(map(int,input().split()))
+for ans in range(101):
+	if arr[ax][ay] == an:
+		print(ans)
+		sys.exit(0)
+	if n >= m:
+		for i in range(n+1):
+			check = [0] * 101
+			for j in range(m+1):
+				if arr[i][j] != 0:
+					check[arr[i][j]]+=1
+					arr[i][j] = 0
+			q = solve(check)
+			num = 1
+			for j in range(len(q)):
+				arr[i][num], arr[i][num+1] = q[j][1],q[j][0]
+				num += 2
+			m = max(m,len(q)*2)
+	else :
+		for i in range(m+1):
+			check = [0] * 101
+			for j in range(n+1):
+				if arr[j][i] != 0:
+					check[arr[j][i]]+=1
+					arr[j][i] = 0
+			q = solve(check)
+			num = 1
+			for j in range(len(q)):
+				arr[num][i], arr[num+1][i] = q[j][1],q[j][0]
+				num += 2	
+			n = max(n,len(q)*2)
+print(-1)

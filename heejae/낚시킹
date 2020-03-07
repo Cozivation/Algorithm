@@ -1,0 +1,42 @@
+r, c, m = list(map(int,input().split()))
+arr = [[[0,0,0] for _ in range(c)] for _ in range(r)]
+ans = 0
+dx, dy = [-1,1,0,0], [0,0,1,-1]
+for _ in range(m):
+	d1, d2, d3, d4, d5 = list(map(int,input().split()))
+	arr[d1-1][d2-1] = [d3,d4-1,d5]
+for j in range(c):
+	for i in range(r):
+		if arr[i][j] != [0,0,0]:
+			ans += arr[i][j][2]
+			arr[i][j] = [0,0,0]
+			break
+	tmp = [[[0,0,0] for y in range(c)] for x in range(r)]
+	for x in range(r):
+		for y in range(c):
+			if arr[x][y] != [0,0,0]:
+				a1, a2, a3 = arr[x][y]
+				if a2 < 2:
+					_x = x
+					for _ in range(a1 % ((r-1)*2)):
+						if _x == 0 and a2 == 0:
+							a2 = 1
+						elif _x == r-1 and a2 == 1:
+							a2 = 0
+						_x += dx[a2]
+					t1, t2, t3 = tmp[_x][y]
+					if t3 < a3:
+						tmp[_x][y] = [a1,a2,a3]
+				else :
+					_y = y
+					for _ in range(a1 % ((c-1)*2)):
+						if _y == 0 and a2 == 3:
+							a2 = 2
+						elif _y == c-1 and a2 == 2:
+							a2 = 3
+						_y += dy[a2]
+					t1, t2, t3 = tmp[x][_y]
+					if t3 < a3:
+						tmp[x][_y] = [a1,a2,a3]
+	arr = tmp[:]
+print(ans)

@@ -1,0 +1,31 @@
+from collections import deque
+
+arr = [deque(map(int,input().strip())) for _ in range(4)]
+c = int(input())
+com = [list(map(int,input().split())) for _ in range(c)]
+m = deque()
+for i in range(c):
+	if com[i][1] == 1:
+		m.append([com[i][0]-1,1,0])
+	else :
+		m.append([com[i][0]-1,-1,0])
+	while m:
+		num,dir,s = m.popleft()
+		rev = 0
+		if dir == 1:
+			rev = -1
+		else :
+			rev = 1
+		if (s== 0 or s == 1) and num != 3 and arr[num][2] != arr[num+1][6]:
+			m.append([num+1,rev,1])
+		if (s== 0 or s == -1) and num != 0 and arr[num][6] != arr[num-1][2]:
+			m.append([num-1,rev,-1])
+		if dir == 1:
+			arr[num].appendleft(arr[num].pop())
+		else :
+			arr[num].append(arr[num].popleft())
+sum = 0
+for i in range(4):
+	sum += arr[i][0] * (2**i)
+print(sum)
+		

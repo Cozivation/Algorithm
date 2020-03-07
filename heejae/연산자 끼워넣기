@@ -1,0 +1,19 @@
+ma,mi = -1e9, 1e9
+def solve(num,cnt,a,b,c,d):
+	global ma,mi
+	if a == -1 or b == -1 or c == -1 or d == -1:
+		return
+	if cnt == n:
+		ma = max(ma,num)
+		mi = min(mi,num)
+		return
+	solve(num+arr[cnt],cnt+1,a-1,b,c,d)
+	solve(num-arr[cnt],cnt+1,a,b-1,c,d)
+	solve(num*arr[cnt],cnt+1,a,b,c-1,d)
+	solve(num//arr[cnt] if num > 0 else -(-(num)//arr[cnt]),cnt+1,a,b,c,d-1)
+n = int(input())
+arr = list(map(int,input().split()))
+a, b, c, d = list(map(int,input().split()))
+solve(arr[0],1,a,b,c,d)
+print(ma)
+print(mi)

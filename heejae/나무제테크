@@ -1,0 +1,33 @@
+from collections import deque
+n, m, k = list(map(int,input().split()))
+nu = [list(map(int,input().split())) for _ in range(n)]
+en = [[5 for _ in range(n)] for _ in range(n)]
+tree = [[deque() for _ in range(n)] for _ in range(n)]
+tmp = [list(map(int,input().split())) for _ in range(m)]
+cnt = 0
+for i in range(m):
+	tree[tmp[i][0]-1][tmp[i][1]-1].append(tmp[i][2])
+	cnt += 1
+for _ in range(k):
+	for i in range(n):
+		for j in range(n):
+			for k in range(len(tree[i][j])):
+				if tree[i][j][k] <= en[i][j]:
+					en[i][j] -= tree[i][j][k]
+					tree[i][j][k] += 1
+				else :
+					while k < len(tree[i][j]):
+						en[i][j] += tree[i][j].pop()//2
+						cnt -= 1
+					break
+	for i in range(n):
+		for j in range(n):
+			for k in range(len(tree[i][j])):
+				if tree[i][j][k] % 5 == 0:
+					for dx, dy in ((1,0),(-1,0),(0,1),(0,-1),(-1,-1),(1,1),(-1,1),(1,-1)):
+						if i + dx == -1 or i + dx == n or j + dy == -1 or j + dy == n:
+							continue
+						tree[i+dx][j+dy].appendleft(1)
+						cnt+=1
+			en[i][j] += nu[i][j]
+print(cnt)

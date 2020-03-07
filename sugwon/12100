@@ -1,0 +1,202 @@
+#include <bits/stdc++.h>
+using namespace std;
+int n;
+int MAP[21][21];
+int TEMP[21][21];
+int arr[5];
+int mx;
+void copy() {
+	for (int i = 0; i < n; i++) {
+		for (int j = 0; j < n; j++) {
+			TEMP[i][j] = MAP[i][j];
+		}
+	}
+}
+void move_right() {
+	for (int i = 0; i < n; i++) {
+		for (int j = n - 1; j > 0; j--) {
+			if (TEMP[i][j] != 0) continue;
+			for (int k = j - 1; k >= 0; k--) {
+				if (TEMP[i][k] == 0) continue;
+				TEMP[i][j] = TEMP[i][k];
+				TEMP[i][k] = 0;
+				break;
+			}
+		}
+	}
+
+	for (int i = 0; i < n; i++) {
+		for (int j = n - 1; j > 0; j--) {
+			if (TEMP[i][j] == TEMP[i][j - 1]) {
+				TEMP[i][j] += TEMP[i][j - 1];
+				TEMP[i][j - 1] = 0;
+			}
+		}
+	}
+
+	for (int i = 0; i < n; i++) {
+		for (int j = n - 1; j > 0; j--) {
+			if (TEMP[i][j] != 0) continue;
+			for (int k = j - 1; k >= 0; k--) {
+				if (TEMP[i][k] == 0) continue;
+				TEMP[i][j] = TEMP[i][k];
+				TEMP[i][k] = 0;
+				break;
+			}
+		}
+	}
+}
+void move_up() {
+	for (int i = 0; i < n; i++) {
+		for (int j = 0; j < n; j++) {
+			if (TEMP[j][i] != 0) continue;
+			for (int k = j + 1; k <= n; k++) {
+				if (TEMP[k][i] == 0) continue;
+				TEMP[j][i] = TEMP[k][i];
+				TEMP[k][i] = 0;
+				break;
+			}
+		}
+	}
+
+	for (int i = 0; i < n; i++) {
+		for (int j = 0; j < n - 1; j++) {
+			if (TEMP[j][i] == TEMP[j + 1][i]) {
+				TEMP[j][i] += TEMP[j + 1][i];
+				TEMP[j + 1][i] = 0;
+			}
+		}
+	}
+
+	for (int i = 0; i < n; i++) {
+		for (int j = 0; j < n; j++) {
+			if (TEMP[j][i] != 0) continue;
+			for (int k = j + 1; k <= n; k++) {
+				if (TEMP[k][i] == 0) continue;
+				TEMP[j][i] = TEMP[k][i];
+				TEMP[k][i] = 0;
+				break;
+			}
+		}
+	}
+}
+
+void move_left() {
+
+	for (int i = 0; i < n; i++) {
+		for (int j = 0; j < n; j++) {
+			if (TEMP[i][j] != 0) continue;
+			for (int k = j + 1; k <= n; k++) {
+				if (TEMP[i][k] == 0) continue;
+				TEMP[i][j] = TEMP[i][k];
+				TEMP[i][k] = 0;
+				break;
+			}
+		}
+	}
+
+	for (int i = 0; i < n; i++) {
+		for (int j = 0; j < n - 1; j++) {
+			if (TEMP[i][j] == TEMP[i][j + 1]) {
+				TEMP[i][j] += TEMP[i][j + 1];
+				TEMP[i][j + 1] = 0;
+			}
+		}
+	}
+
+	for (int i = 0; i < n; i++) {
+		for (int j = 0; j < n; j++) {
+			if (TEMP[i][j] != 0) continue;
+			for (int k = j + 1; k <= n; k++) {
+				if (TEMP[i][k] == 0) continue;
+				TEMP[i][j] = TEMP[i][k];
+				TEMP[i][k] = 0;
+				break;
+			}
+		}
+	}
+}
+
+void move_down() {
+	for (int i = 0; i < n; i++) {
+		for (int j = n - 1; j > 0; j--) {
+			if (TEMP[j][i] != 0) continue;
+			for (int k = j - 1; k >= 0; k--) {
+				if (TEMP[k][i] == 0) continue;
+				TEMP[j][i] = TEMP[k][i];
+				TEMP[k][i] = 0;
+				break;
+			}
+		}
+	}
+
+	for (int i = 0; i < n; i++) {
+		for (int j = n - 1; j > 0; j--) {
+			if (TEMP[j][i] == TEMP[j - 1][i]) {
+				TEMP[j][i] += TEMP[j - 1][i];
+				TEMP[j - 1][i] = 0;
+			}
+		}
+	}
+
+	for (int i = 0; i < n; i++) {
+		for (int j = n - 1; j > 0; j--) {
+			if (TEMP[j][i] != 0) continue;
+			for (int k = j - 1; k >= 0; k--) {
+				if (TEMP[k][i] == 0) continue;
+				TEMP[j][i] = TEMP[k][i];
+				TEMP[k][i] = 0;
+				break;
+			}
+		}
+	}
+}
+void play() {
+	for (int i = 0; i < 5; i++) {
+		int dir = arr[i];
+		if (dir == 0) move_right();
+		else if (dir == 1) move_up();
+		else if (dir == 2) move_left();
+		else if (dir == 3) move_down();
+	}
+	cout << "TEMP" << '\n';
+	for (int i = 0; i < n; i++) {
+		for (int j = 0; j < n; j++) {
+			cout << TEMP[i][j] << " ";
+		}
+		cout << '\n';
+	}
+	cout << '\n';
+	for (int i = 0; i < n; i++) {
+		for (int j = 0; j < n; j++) {
+			mx = max(mx, TEMP[i][j]);
+		}
+	}
+}
+void dfs(int cnt) {
+	if (cnt == 5) {
+		copy();
+		play();
+		return;
+	}
+	
+	for (int i = 0; i < 4; i++) {
+		arr[cnt] = i;
+		//cout << "arr[" << cnt << "]: " << arr[cnt] << " i: " << i << '\n';
+		dfs(cnt + 1);
+	}
+}
+int main() {
+	cin.tie(0); ios::sync_with_stdio(0);
+	cin >> n;
+	for (int i = 0; i < n; i++) {
+		for (int j = 0; j < n; j++) {
+			cin >> MAP[i][j];
+		}
+	}
+
+	dfs(0);
+
+	cout << mx;
+	return 0;
+}

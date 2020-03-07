@@ -1,0 +1,14 @@
+n = int(input())
+arr = [list(map(int,input().split())) for _ in range(n)]
+ans = 0
+def solve(num, su):
+	global ans
+	if num > n:
+		return
+	if num == n:
+		ans = max(ans,su)
+		return
+	solve(num + arr[num][0],su + arr[num][1])
+	solve(num+1,su)
+solve(0,0)
+print(ans)

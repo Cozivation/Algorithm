@@ -1,0 +1,43 @@
+import itertools
+from collections import deque
+n,m = map(int,input().split())
+a = [list(map(int,input().split())) for _ in range(n)]
+q = deque()
+infect = 0
+ans = 10**9
+for i in range(n):
+	for j in range(n):
+		if a[i][j] == 2:
+			q.append((i,j))
+		elif a[i][j] == 0:
+			infect+=1
+tmp = [i for i in range(len(q))]
+com = list(itertools.combinations(tmp,m))
+for c in com:
+	arr = deque()
+	time = [[-1] * n for _ in range(n)]
+	for i in range(m) :
+		_x,_y = q[c[i]]
+		arr.append((_x,_y))
+		time[_x][_y] = 0
+	cnt = 0
+	ma = 0
+	while arr:
+		_x,_y = arr.popleft()
+		for dx,dy in (-1,0),(1,0),(0,-1),(0,1):
+			nx = _x + dx
+			ny = _y + dy
+			if nx < 0 or ny < 0 or nx == n or ny == n:
+				continue
+			if a[nx][ny] != 1 and time[nx][ny] == -1:
+				time[nx][ny] = time[_x][_y] + 1
+				arr.append((nx,ny))
+				if a[nx][ny] == 0:
+					cnt+=1
+					ma = time[nx][ny]
+	if cnt == infect:
+		ans = min(ma,ans)
+if ans == 10**9 : 
+	print(-1)
+else :
+	print(ans)

@@ -1,0 +1,20 @@
+n, m, x, y, k = list(map(int,input().split()))
+di = [(2, 1, 5, 0, 4, 3),(3, 1, 0, 5, 4, 2),(4, 0, 2, 3, 5, 1),(1, 5, 2, 3, 0, 4)]
+dx, dy = (0, 0, -1, 1), (1, -1, 0, 0)
+arr = [list(map(int,input().split())) for i in range(n)]
+brr = list(map(int,input().split()))
+dice, temp = [0] * 6, [0] * 6
+for i in range(k):
+	d = brr[i] - 1
+	if x + dx[d] == -1 or x + dx[d] == n or y + dy[d] == -1 or y + dy[d] == m:
+		continue
+	x, y = x + dx[d], y + dy[d]
+	temp = dice[:]
+	for j in range(6):
+		dice[j] = temp[di[d][j]]
+	if arr[x][y] > 0:
+		dice[5] = arr[x][y]
+		arr[x][y] = 0
+	else :
+		arr[x][y] = dice[5]
+	print(dice[0])

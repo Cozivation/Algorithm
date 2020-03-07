@@ -1,0 +1,37 @@
+ans = 0
+def solve(cnt,sum):
+	global ans
+	if cnt == 10:
+		ans = max(ans,sum)
+		return
+	for i in range(4):
+		mt, lt, st = mon[i], level[i], sum
+		if mon[i] == len(dice[level[i]]) - 1:
+			continue
+		elif mon[i] + arr[cnt] >= len(dice[level[i]]):
+			mon[i] = len(dice[level[i]]) - 1
+		elif mon[i] + arr[cnt] < len(dice[level[i]]):
+			if dice[level[i]][mon[i] + arr[cnt]] in [dice[level[j]][mon[j]] for j in range(4) if i != j]:
+				continue
+			else:
+				mon[i] += arr[cnt]
+		if dice[level[i]][mon[i]] > 100:
+			sum += dice[level[i]][mon[i]] // 10
+		else :
+			sum += dice[level[i]][mon[i]]
+		if level[i] == 0 and dice[level[i]][mon[i]] == 10 :
+			level[i] = 1
+		elif level[i] == 0 and dice[level[i]][mon[i]] == 20 :
+			level[i] = 2
+		elif level[i] == 0 and dice[level[i]][mon[i]] == 300:
+			level[i] = 3
+		solve(cnt+1,sum)
+		mon[i], level[i], sum = mt, lt, st
+arr = list(map(int,input().split()))
+dice = [(0,2,4,6,8,10,12,14,16,18,20,22,24,26,28,300,32,34,36,38,40,0)
+,(0,2,4,6,8,10,13,160,19,25,30,35,40,0)
+,(0,2,4,6,8,10,12,14,16,18,20,220,240,25,30,35,40,0)
+,(0,2,4,6,8,10,12,14,16,18,20,22,24,26,28,300,280,27,260,25,30,35,40,0)]
+mon, level = [0] * 4, [0] * 4
+solve(0,0)
+print(ans)

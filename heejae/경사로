@@ -1,0 +1,22 @@
+ans = 0
+def check(num,si):
+	global ans
+	count = 1
+	for i in range(n-1):
+		dis = arr[i+1][num] - arr[i][num] if si == 0 else arr[num][i+1] - arr[num][i]
+		if dis == 1 and count >= l:
+			count = 1
+		elif dis == 0:
+			count += 1
+		elif dis == -1 and count >= 0:
+			count = -l+1
+		else :
+			return
+	if count >= 0:
+		ans += 1
+n, l = list(map(int,input().split()))
+arr = [list(map(int,input().split())) for _ in range(n)]
+for i in range(n):
+	check(i,0)
+	check(i,1)
+print(ans)

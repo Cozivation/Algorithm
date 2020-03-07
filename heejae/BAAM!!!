@@ -1,0 +1,28 @@
+from collections import deque
+n = int(input())
+arr = [[0] * n for _ in range(n)]
+k = int(input())
+for i in range(k):
+	one, two = list(map(int,input().split()))
+	arr[one-1][two-1] = 1
+arr[0][0] = 2
+l = int(input())
+brr = [list(map(str,input().split())) for _ in range(l)]
+ans, q, x, y, d, cnt = 0, deque(), 0, 0, 0, 0
+q.append([0,0])
+dx, dy, L, D = [0,0,1,-1],[1,-1,0,0],[3,2,0,1],[2,3,1,0]
+while True:
+	x, y = x + dx[d], y + dy[d]
+	ans += 1
+	if x == -1 or x == n or y == -1 or y == n or arr[x][y] == 2:
+		print(ans)
+		break
+	if arr[x][y] == 0:
+		tx, ty = q.popleft()
+		arr[tx][ty] = 0
+	arr[x][y] = 2
+	q.append([x,y])
+	tm1, tm2 = brr[cnt]
+	if int(tm1) == ans and cnt != -1:
+		d = L[d] if tm2 == "L" else D[d]
+		cnt = cnt+1 if cnt + 1 != l else -1 

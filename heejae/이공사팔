@@ -1,0 +1,52 @@
+from collections import deque
+def get(i,j):
+	if arr[i][j] != 0:
+		q.append(arr[i][j])
+		arr[i][j] = 0
+def merge(xx,yy,dx,dy):
+	while q:
+		nu = q.popleft()
+		if arr[xx][yy] == 0:
+			arr[xx][yy] = nu
+		elif arr[xx][yy] == nu:
+			arr[xx][yy] += nu
+			xx, yy = xx + dx, yy + dy
+		else :
+			xx, yy = xx + dx, yy + dy
+			arr[xx][yy] = nu
+def move(num):
+	if num == 0:
+		for j in range(n):
+			for i in range(n-1,-1,-1):
+				get(i,j)
+			merge(n-1,j,-1,0)
+	elif num == 1:
+		for j in range(n):
+			for i in range(n):
+				get(i,j)
+			merge(0,j,1,0)
+	elif num == 2:
+		for i in range(n):
+			for j in range(n):
+				get(i,j)
+			merge(i,0,0,1)
+	else :
+		for i in range(n):
+			for j in range(n-1,-1,-1):
+				get(i,j)
+			merge(i,n-1,0,-1)
+def solve(cnt):
+	global ans,arr
+	if cnt == 5:
+		ans = max(ans,max(map(max,arr)))
+		return	
+	for i in range(4):
+		brr = [arr[k][:] for k in range(n)]
+		move(i)
+		solve(cnt+1)
+		arr = [brr[k][:] for k in range(n)]
+n = int(input())
+arr = [list(map(int,input().split())) for _ in range(n)]
+ans, q = 0, deque()
+solve(0)
+print(ans)
